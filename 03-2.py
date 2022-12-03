@@ -1,15 +1,11 @@
+import string
 import sys
 
-result = 0
+res = 0
 
-uniq = []
-for line in sys.stdin:
-    uniq.append(set(line.rstrip()))
-for idx in range(0, len(uniq), 3):
-    (v,) = uniq[idx].intersection(uniq[idx+1]).intersection(uniq[idx+2])
-    if ord(v) >= ord("a"):
-        result += ord(v) - ord("a") + 1
-    else:
-        result += ord(v) - ord("A") + 1 + 26
+lines = sys.stdin.read().rstrip().split("\n")
+for chunk in [lines[n : n + 3] for n in range(0, len(lines), 3)]:
+    (ch,) = set.intersection(*map(set, chunk))
+    res += (string.ascii_lowercase + string.ascii_uppercase).index(ch) + 1
 
-print(result)
+print(res)
