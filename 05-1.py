@@ -10,10 +10,8 @@ for row in reversed(start):
             arr.append(ch)
 
 for row in delta:
-    _, n, _, src, _, dst = row.split(" ")
-    n = int(n)
-    src = int(src) - 1
-    dst = int(dst) - 1
+    row = row.split(" ")
+    n, src, dst = int(row[1]), int(row[3]) - 1, int(row[5]) - 1
     stack[dst].extend(reversed(stack[src][-n:]))
     del stack[src][-n:]
 
