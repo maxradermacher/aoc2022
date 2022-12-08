@@ -1,47 +1,38 @@
 import math
 import sys
 
-heights = [list(map(int, list(line))) for line in sys.stdin.read().rstrip().split("\n")]
-
-w, h = len(heights[0]), len(heights)
+t = [list(map(int, list(line))) for line in sys.stdin.read().rstrip().split("\n")]
+w, h = len(t[0]), len(t)
 
 
 def enumerate_rows(col, start, end):
-    return [(row, col) for row in range(start, end + 1)]
+    return [(row, col) for row in range(start, end)]
 
 
 def enumerate_cols(row, start, end):
-    return [(row, col) for col in range(start, end + 1)]
+    return [(row, col) for col in range(start, end)]
 
 
-def viewing_distance(stop, sight_path):
+def view_dist(stop, sight_path):
     res = 0
     for (row, col) in sight_path:
-        if heights[row][col] <= stop:
+        if t[row][col] <= stop:
             res += 1
-        if heights[row][col] >= stop:
+        if t[row][col] >= stop:
             break
     return res
 
 
 def main():
     res = 0
-    for row in range(0, h):
-        for col in range(0, w):
-            sight_paths = [
-                enumerate_rows(col, row + 1, h - 1),
-                reversed(enumerate_rows(col, 0, row - 1)),
-                enumerate_cols(row, col + 1, w - 1),
-                reversed(enumerate_cols(row, 0, col - 1)),
-            ]
-            viewing_distances = []
-            for sight_path in sight_paths:
-                viewing_distances.append(
-                    viewing_distance(heights[row][col], sight_path)
-                )
-            scenic_score = math.prod(viewing_distances)
-            if scenic_score > res:
-                res = scenic_score
+    for (row, col) in [(r, c) for r in range(0, h) for c in range(0, w)]:
+        sight_paths = [
+            enumerate_rows(col, row + 1, h),
+            reversed(enumerate_rows(col, 0, row)),
+            enumerate_cols(row, col + 1, w),
+            reversed(enumerate_cols(row, 0, col)),
+        ]
+        res = max(res, math.prod([view_dist(t[row][col], x) for x in sight_paths]))
     return res
 
 
