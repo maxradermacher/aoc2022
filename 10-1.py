@@ -12,7 +12,7 @@ for l in sys.stdin:
         x += int(arg)
 
 res = 0
-for cycle in [20, 60, 100, 140, 180, 220]:
-    if cycle <= len(v):
-        res += cycle * v[cycle - 1]
+for (idx, xval) in enumerate(v):
+    if ((idx + 1) + 20) % 40 == 0:
+        res += (idx + 1) * xval
 print(res)
