@@ -11,8 +11,8 @@ for l in sys.stdin:
         v.append(x)
         x += int(arg)
 
-for (idx, xpos) in enumerate(v):
+for (idx, xval) in enumerate(v):
     pixel = idx % 40
-    print("#" if abs(xpos - pixel) <= 1 else ".", end="")
-    if pixel == 39:
+    print("#" if abs(xval - pixel) <= 1 else ".", end="")
+    if pixel + 1 == 40:
         print()
