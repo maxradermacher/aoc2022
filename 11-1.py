@@ -1,23 +1,25 @@
 import math
 import sys
 
+
 class Monkey:
-    def __init__(self, items, op, test, t, f):
+    def __init__(self, items, operation, test, true_idx, false_idx):
         self.items = items
-        self.op = op
+        self.operation = operation
         self.test = test
-        self.t = t
-        self.f = f
+        self.true_idx = true_idx
+        self.false_idx = false_idx
         self.total = 0
 
+
 monkeys = []
-for monkey in sys.stdin.read().split("\n\n"):
-    lines = monkey.split("\n")
+for group in sys.stdin.read().split("\n\n"):
+    lines = group.split("\n")
     items = list(map(int, lines[1][18:].split(", ")))
     operator, amount = lines[2][23:].split(" ")
-    divis = int(lines[3][21:])
-    t = int(lines[4][29:])
-    f = int(lines[5][30:])
+    test = int(lines[3][21:])
+    true_idx = int(lines[4][29:])
+    false_idx = int(lines[5][30:])
 
     def operation(old, operator=operator, amount=amount):
         if amount == "old":
@@ -29,7 +31,7 @@ for monkey in sys.stdin.read().split("\n\n"):
         else:
             return old * operand
 
-    monkeys.append(Monkey(items, operation, divis, t, f))
+    monkeys.append(Monkey(items, operation, test, true_idx, false_idx))
 
 for _ in range(20):
     for m in monkeys:
@@ -37,8 +39,9 @@ for _ in range(20):
         m.items = []
         m.total += len(items)
         for item in items:
-            item = m.op(item) // 3
-            monkeys[m.t if item % m.test == 0 else m.f].items.append(item)
+            item = m.operation(item) // 3
+            new_idx = m.true_idx if item % m.test == 0 else m.false_idx
+            monkeys[new_idx].items.append(item)
 
 
 print(math.prod(sorted([m.total for m in monkeys])[-2:]))
