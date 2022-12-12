@@ -2,7 +2,6 @@ import sys
 
 e = [list(map(ord, list(line))) for line in sys.stdin.read().rstrip().split("\n")]
 w, h = len(e[0]), len(e)
-print(w, h)
 
 for (row, vals) in enumerate(e):
     for (col, val) in enumerate(vals):
@@ -32,4 +31,3 @@ while True:
         if e[npos[0]][npos[1]] <= e[pos[0]][pos[1]] + 1:
             visited[npos[0]][npos[1]] = True
             stack.append((n + 1, npos))
-    print(stack)
