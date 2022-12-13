@@ -19,10 +19,11 @@ def parse(line):
             line = line[1:]
             continue
         for (idx, ch) in enumerate(line):
-            if not ch.isdigit():
-                stack[-1].append(int(line[:idx]))
-                line = line[idx:]
-                break
+            if ch.isdigit():
+                continue
+            stack[-1].append(int(line[:idx]))
+            line = line[idx:]
+            break
 
 
 def compare(l1, l2):
@@ -39,11 +40,8 @@ def compare(l1, l2):
 
 
 total = 0
-pairs = sys.stdin.read().split("\n\n")
-for idx, pair in enumerate(pairs):
-    lines = pair.split("\n")
-    l1, l2 = parse(lines[0]), parse(lines[1])
+for (idx, g) in enumerate([g for g in sys.stdin.read().rstrip().split("\n\n")]):
+    l1, l2 = [parse(l) for l in g.split("\n")]
     if compare(l1, l2) < 0:
         total += idx + 1
-
 print(total)
