@@ -20,10 +20,11 @@ def parse(line):
             line = line[1:]
             continue
         for (idx, ch) in enumerate(line):
-            if not ch.isdigit():
-                stack[-1].append(int(line[:idx]))
-                line = line[idx:]
-                break
+            if ch.isdigit():
+                continue
+            stack[-1].append(int(line[:idx]))
+            line = line[idx:]
+            break
 
 
 def compare(l1, l2):
@@ -40,17 +41,15 @@ def compare(l1, l2):
 
 
 packets = []
-for l in sys.stdin:
-    l = l.rstrip()
-    if len(l) != 0:
-        packets.append(parse(l))
+for l in [v for g in sys.stdin.read().rstrip().split("\n\n") for v in g.split("\n")]:
+    packets.append(parse(l))
 
 packets.append([[2]])
 packets.append([[6]])
 packets.sort(key=functools.cmp_to_key(compare))
 
+total = 1
 for (idx, packet) in enumerate(packets):
-    if packet == [[2]]:
-        print(idx)
-    if packet == [[6]]:
-        print(idx)
+    if packet in ([[2]], [[6]]):
+        total *= idx + 1
+print(total)
