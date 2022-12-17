@@ -34,8 +34,8 @@ for _ in range(2022):
     r = ROCKS[ridx % len(ROCKS)]
     ridx += 1
     while True:
-        dx = 1 if PATTERN[pidx % len(PATTERN)] == ">" else -1
-        pidx += 1
+        dx = 1 if PATTERN[pidx] == ">" else -1
+        pidx = (pidx + 1) % len(PATTERN)
         if is_valid(r, x + dx, y):
             x += dx
         dy = -1

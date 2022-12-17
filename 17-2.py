@@ -26,24 +26,21 @@ def is_valid(r, x, y):
     return True
 
 
-extra = None
-pat = []
-det = []
+repeated = None
+pat, det = [], []
 while ridx < 1_000_000_000_000:
-    pidx = pidx % len(PATTERN)
-    if ridx % len(ROCKS) == 0 and extra is None:
+    if repeated is None and ridx % len(ROCKS) == 0:
         pat.append(pidx)
         det.append((ridx, top))
-        for length in range(len(pat) // 4, 0, -1):
+        for length in range(len(pat) // 3, 0, -1):
             r1 = pat[-length:]
             r2 = pat[-2 * length : -length]
             r3 = pat[-3 * length : -2 * length]
-            r4 = pat[-4 * length : -3 * length]
-            if r1 == r2 and r2 == r3 and r3 == r4:
+            if r1 == r2 and r2 == r3:
                 old, new = det[-1 - length], det[-1]
                 cycles = (1_000_000_000_000 - new[0]) // (new[0] - old[0])
                 ridx += cycles * (new[0] - old[0])
-                extra = cycles * (new[1] - old[1])
+                repeated = cycles * (new[1] - old[1])
     x = 2
     y = top + 3
     for _ in range(len(rows), y + 4):
@@ -52,8 +49,7 @@ while ridx < 1_000_000_000_000:
     ridx += 1
     while True:
         dx = 1 if PATTERN[pidx] == ">" else -1
-        pidx += 1
-        pidx = pidx % len(PATTERN)
+        pidx = (pidx + 1) % len(PATTERN)
         if is_valid(r, x + dx, y):
             x += dx
         dy = -1
@@ -65,4 +61,4 @@ while ridx < 1_000_000_000_000:
                 top = max(top, y + vy + 1)
             break
 
-print("Done", top, extra, top + extra)
+print(top + repeated)
