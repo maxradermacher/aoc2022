@@ -13,17 +13,17 @@ stack = [(0, 30, "AA", 0)]
 b = {}
 while len(stack) > 0:
     total, time, name, opened = stack.pop(0)
-    if time == 0:
-        res = max(res, total)
-        continue
-    best = b.get((name, opened), -1)
+    res = max(res, total)
+    if time == 1:
+        break
+    best = b.get((name,), -1)
     if total <= best:
         continue
-    b[(name, opened)] = total
+    b[(name,)] = total
     bit, rate, tunnels = v[name]
-    for tunnel in tunnels:
-        stack.append((total, time - 1, tunnel, opened))
     if (opened & (1 << bit)) == 0 and rate > 0:
         stack.append((total + (time - 1) * rate, time - 1, name, opened | (1 << bit)))
+    for tunnel in tunnels:
+        stack.append((total, time - 1, tunnel, opened))
 
 print(res)
